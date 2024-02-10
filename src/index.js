@@ -1,9 +1,7 @@
 const express = require("express");
 const mongoose = require('mongoose');
-// const authRoute = require('../routes/auth')
-// const blogsRoute = require('../routes/blogs')
-// const profileRoute = require('../routes/profileBlogs')
-// const tagsRoute = require('../routes/tagsRoute')
+const authRoute = require('../routes/auth')
+
 const cors = require('cors');
 const dotenv = require('dotenv')
 
@@ -32,10 +30,8 @@ app.get('/', (req, res) => {
     res.send("Hello world")
 })
 
-// app.use('/api/auth', authRoute)
-// app.use('/api/blogs', blogsRoute)
-// app.use('/api/profile',profileRoute)
-// app.use('/api/tags',tagsRoute)
+app.use('/api/auth', authRoute)
+
 
 const port = process.env.PORT || 8080
 app.listen(port, (req, res) => {
