@@ -15,6 +15,6 @@ router.post('/createuser', validateUserRegister, catchAsync(createUser))
 router.post('/login', validateUserLogin, catchAsync(loginUser))
 
 // get logged in user details using: POST /api/auth/getuser "login required"
-router.post('/getuser',fetchUser, catchAsync(getUser))
+router.get('/getuser',fetchUser, catchAsync(getUser))
 
 module.exports = router

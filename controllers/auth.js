@@ -15,8 +15,7 @@ module.exports.createUser = async (req, res) => {
         user: { id: user._id }
     }
     // console.log(process.env.SECRET);
-    const authToken = jwt.sign(data, secretKey)
-    res.status(201).json({ success: true, user: resp, authToken })
+    res.status(201).json({ success: true, user: resp })
 }
 
 module.exports.loginUser = async (req, res) => {
