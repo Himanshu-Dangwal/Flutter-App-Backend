@@ -18,8 +18,6 @@ module.exports.fetchAllDataUser = async (req, res) => {
 }
 
 
-
-
 // Logged in user can add a data
 module.exports.addData = async (req, res) => {
     try {
@@ -97,38 +95,41 @@ module.exports.updateData = async (req, res) => {
     if (req.body.description) {
       data.description = req.body.description;
     }
-    if (req.body.tag) {
-      data.tag = req.body.tag;
-    }
 
-
-    // Use findByIdAndUpdate to update the blog post
-    await Data.findByIdAndUpdate(dataId, data);
 
     // Remove existing tags
     if(req.body.tag){
         const earlierTags = data.tag;
         for (const tagText of earlierTags) {
-        const existingTag = await Tag.findOne({ categoryName: tagText });
-            if (existingTag) {
-                existingTag.category.pull(data.id);
-                await existingTag.save();
-            }
+          const existingTag = await Tag.findOne({ categoryName: tagText });
+          if (existingTag) {
+              existingTag.category.pull(dataId); // Remove the dataId from the category array
+              if (existingTag.category.length === 0) {
+                  // If the category array is empty, delete the tag
+                  await Tag.deleteOne({ _id: existingTag._id });
+              } else {
+                  // If the category array is not empty, save the updated tag
+                  await existingTag.save();
+              }
+          }
         }
 
         // Add new tags
         for (const tagText of req.body.tag || []) {
-        const existingTag = await Tag.findOne({ categoryName: tagText });
+          const existingTag = await Tag.findOne({ categoryName: tagText });
             if (existingTag) {
-                existingTag.category.push(data.id);
+                existingTag.category.push(dataId);
                 await existingTag.save();
             } else {
-                const newTag = new Tag({ categoryName: tagText, category: [data.id] });
+                const newTag = new Tag({ categoryName: tagText, category: [dataId] });
                 await newTag.save();
             }
         }
 
+        data.tag = req.body.tag;
     }
+    // Use findByIdAndUpdate to update the data
+    await Data.findByIdAndUpdate(dataId, data);
     
     res.status(200).json({ message: 'Data updated successfully' });
   } catch (error) {
@@ -157,8 +158,25 @@ module.exports.deleteData = async (req, res) => {
       }
   
       // Delete the data
-    await Data.findByIdAndDelete(dataId);
-  
+      
+      if(data.tag){
+        const earlierTags = data.tag;
+        for (const tagText of earlierTags) {
+            const existingTag = await Tag.findOne({ categoryName: tagText });
+            if (existingTag) {
+                existingTag.category.pull(dataId); // Remove the dataId from the category array
+                if (existingTag.category.length === 0) {
+                    // If the category array is empty, delete the tag
+                    await Tag.deleteOne({ _id: existingTag._id });
+                } else {
+                    // If the category array is not empty, save the updated tag
+                    await existingTag.save();
+                }
+            }
+        }
+      }    
+
+      await Data.findByIdAndDelete(dataId);
       res.status(200).json({ message: 'Data deleted successfully' });
     } catch (error) {
       console.error('Error deleting data:', error);
