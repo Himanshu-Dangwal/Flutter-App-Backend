@@ -2,19 +2,13 @@ const express = require("express");
 const router = express.Router();
 const {fetchUser} = require('../middlewares/fetchUser')
 const {validateNewData} = require('../middlewares/validateNewData')
-const {fetchAllData,addData,updateData,deleteData} = require('../controllers/data')
+const {fetchAllDataUser,addData,updateData,deleteData} = require('../controllers/data')
 const catchAsync = require('../utils/catchAsync')
 
+//Fetch all data points of a user
+router.get('/', fetchUser, catchAsync(fetchAllDataUser))
 
-//Note
-/*
-    id in all routes refers to the data Id
-*/
-
-//Get all data
-router.get('/', fetchAllData)
-
-// Add new data using : POST /api/data/
+//Add data 
 router.post('/addData', fetchUser, validateNewData, catchAsync(addData))
 
 // Update the data using: PUT /api/data
