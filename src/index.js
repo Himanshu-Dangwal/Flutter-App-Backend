@@ -15,7 +15,7 @@ const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017'
 app.use(cors());
 
 async function connectToMongo(){
-   mongoose.set("strictQuery", false);
+    mongoose.set("strictQuery", false);
     mongoose.connect(dbUrl);
     console.log("Succesfully connected to mongoDB database")
 }
