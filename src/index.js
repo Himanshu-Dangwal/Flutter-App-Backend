@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require('mongoose');
 const authRoute = require('../routes/auth')
+const dataRoute = require('../routes/data')
 
 const cors = require('cors');
 const dotenv = require('dotenv')
@@ -31,6 +32,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/auth', authRoute)
+app.use('/api/data', dataRoute)
 
 
 const port = process.env.PORT || 8080

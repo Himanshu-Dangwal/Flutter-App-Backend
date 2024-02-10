@@ -3,6 +3,9 @@ const secretKey = "HimanshuDangwal"
 const jwt = require('jsonwebtoken');
 module.exports.fetchUser = (req, res, next) => {
     // Get user from jwt token and add id to req object
+    if(!(req.headers.authorization)){
+      return res.status(401).json({ message: 'Authorization required' });
+    }
     const token = req.headers.authorization.split(' ')[1];
     // console.log(token);
     if (!token) {
