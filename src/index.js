@@ -12,6 +12,7 @@ const app = express()
 
 const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017'
 
+//Cross Origin Resource Sharing
 app.use(cors());
 
 async function connectToMongo(){

@@ -18,3 +18,5 @@ router.post('/login', validateUserLogin, catchAsync(loginUser))
 router.get('/getuser',fetchUser, catchAsync(getUser))
 
 module.exports = router
+
+//Auth Toke Format : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjUxZDUzYWZlZjE4MzRlMjQ4ZjlkNDZjIn0sImlhdCI6MTY5NjQyMDg1Nn0.jLo-OHJdhYs6blxIfryfUpJRNWeTHtfKnpgbWjbkaGI
